@@ -34,3 +34,14 @@ Instalar font awesome
 
     importar no index.css
         @import url("../node_modules/@fortawesome/fontawesome-free/css/all.min.css")
+
+
+         
+
+Criando um projeto webAPI .NET         
+    dotnet new webapi -n ProAtividade.API
+
+executar apos a criação 
+    dotnet dev-certs https --clean
+
+    dotnet dev-certs https --trust

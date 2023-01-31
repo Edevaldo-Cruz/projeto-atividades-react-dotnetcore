@@ -3,11 +3,11 @@ import React from "react";
 export default function Atividade(props) {
   function prioridadeLabel(param) {
     switch (param) {
-      case "1":
+      case "Baixo":
         return "Baixo";
-      case "2":
+      case "Normal":
         return "Normal";
-      case "3":
+      case "Alta":
         return "Alta";
       default:
         return "Não definido";
@@ -16,11 +16,11 @@ export default function Atividade(props) {
 
   function prioridadeIcone(param, icone) {
     switch (param) {
-      case "1":
+      case "Baixo":
         return icone ? "smile" : "success";
-      case "2":
+      case "Normal":
         return icone ? "meh" : "dark";
-      case "3":
+      case "Alta":
         return icone ? "frown" : "warning";
       default:
         return "Não definido";

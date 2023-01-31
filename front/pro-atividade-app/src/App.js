@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import "./App.css";
 import AtividadeForm from "./components/AtividadeForm";
 import AtividadeLista from "./components/AtividadeLista";
+import api from "./api/atividade";
+import { Button, Modal } from "react-bootstrap";
 
 // let initialState = [
 //   {
@@ -19,22 +21,38 @@ import AtividadeLista from "./components/AtividadeLista";
 // ];
 
 function App() {
-  const [index, setIndex] = useState(0);
+  const [index] = useState(0);
   const [atividades, setAtividades] = useState([]); //useState(initialState);
   const [atividade, setAtividade] = useState({ id: 0 });
 
-  useEffect(() => {
-    atividades.length <= 0
-      ? setIndex(1)
-      : setIndex(
-          Math.max.apply(
-            Math,
-            atividades.map((item) => item.id)
-          ) + 1
-        );
-  }, [atividades]);
+  const [show, setShow] = useState(false);
 
-  function addAtividade(ativ) {
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const pegaTodasAtividades = async () => {
+    const response = await api.get("atividade");
+    return response.data;
+  };
+
+  useEffect(() => {
+    // atividades.length <= 0 REFATORADO PARA USAR API
+    //   ? setIndex(1)
+    //   : setIndex(
+    //       Math.max.apply(
+    //         Math,
+    //         atividades.map((item) => item.id)
+    //       ) + 1
+    //     );
+
+    const getAtividades = async () => {
+      const todasAtividades = await pegaTodasAtividades();
+      if (todasAtividades) setAtividades(todasAtividades);
+    };
+    getAtividades();
+  }, []);
+
+  const addAtividade = async (ativ) => {
     //(e) refatorado {
     //e.preventDefault(); //retira o comportamento padrão, nesse caso a ação de submit //refatorado
 
@@ -53,15 +71,22 @@ function App() {
     // atividades.push(atividade); refatorado
 
     //cria um novo array coloca todos os objetos ja existente nele e adiciona os novos
-    setAtividades([...atividades, { ...ativ, id: index }]);
-  }
 
-  function deletarAtividade(id) {
-    const atividadesFiltradas = atividades.filter(
-      (atividade) => atividade.id !== id
-    );
-    setAtividades([...atividadesFiltradas]);
-  }
+    // setAtividades([...atividades, { ...ativ, id: index }]); refatorado
+
+    const response = await api.post("atividade", ativ);
+    setAtividades([...atividades, response.data]);
+    console.log(response.status);
+  };
+
+  const deletarAtividade = async (id) => {
+    if (await api.delete(`atividade/${id}`)) {
+      const atividadesFiltradas = atividades.filter(
+        (atividade) => atividade.id !== id
+      );
+      setAtividades([...atividadesFiltradas]);
+    }
+  };
 
   function pegarAtividade(id) {
     const atividade = atividades.filter((atividade) => atividade.id === id);
@@ -72,12 +97,14 @@ function App() {
     setAtividade({ id: 0 });
   }
 
-  function atualizarAtividade(ativ) {
+  const atualizarAtividade = async (ativ) => {
+    const response = await api.put(`atividade/${ativ.id}`, ativ);
+    const { id } = response.data;
     setAtividades(
-      atividades.map((item) => (item.id === ativ.id ? ativ : item))
+      atividades.map((item) => (item.id === id ? response.data : item))
     );
     setAtividade({ id: 0 });
-  }
+  };
 
   return (
     <>
@@ -93,6 +120,25 @@ function App() {
         deletarAtividade={deletarAtividade}
         pegarAtividade={pegarAtividade}
       />
+
+      <Button variant="primary" onClick={handleShow}>
+        Launch demo modal
+      </Button>
+
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Modal heading</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleClose}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }

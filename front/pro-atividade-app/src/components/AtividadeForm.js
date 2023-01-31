@@ -71,10 +71,10 @@ export default function AtividadeForm(props) {
             className="form-select"
             onChange={inputTextHandler}
           >
-            <option defaultValue="0">Selecione a prioridade</option>
-            <option value="1">Baixa</option>
-            <option value="2">Normal</option>
-            <option value="3">Alto</option>
+            <option value="Não definido">Selecione a prioridade</option>
+            <option value="Baixo">Baixo</option>
+            <option value="Normal">Normal</option>
+            <option value="Alto">Alto</option>
           </select>
         </div>
         <div className="col-md-12">

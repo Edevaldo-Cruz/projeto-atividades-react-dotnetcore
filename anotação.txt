@@ -45,3 +45,11 @@ executar apos a criação
     dotnet dev-certs https --clean
 
     dotnet dev-certs https --trust
+
+PARA FRONTEND ACESSAR O BACKEND
+    services.AddCors();
+
+
+     app.UseCors(option => option.AllowAnyHeader()
+                                        .AllowAnyMethod()
+                                        .AllowAnyOrigin());

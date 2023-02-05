@@ -4,11 +4,9 @@ export default function Atividade(props) {
   function prioridadeLabel(param) {
     switch (param) {
       case "Baixo":
-        return "Baixo";
       case "Normal":
-        return "Normal";
-      case "Alta":
-        return "Alta";
+      case "Alto":
+        return param;
       default:
         return "Não definido";
     }
@@ -20,7 +18,7 @@ export default function Atividade(props) {
         return icone ? "smile" : "success";
       case "Normal":
         return icone ? "meh" : "dark";
-      case "Alta":
+      case "Alto":
         return icone ? "frown" : "warning";
       default:
         return "Não definido";
@@ -63,7 +61,7 @@ export default function Atividade(props) {
           </button>
           <button
             className="btn btn-sm btn-outline-danger"
-            onClick={() => props.deletarAtividade(props.ativ.id)}
+            onClick={() => props.handleConfirmModal(props.ativ.id)}
           >
             <i className="fas fa-trash me-2"></i>
             Deletar

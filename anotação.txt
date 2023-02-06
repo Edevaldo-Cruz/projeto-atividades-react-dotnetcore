@@ -53,3 +53,48 @@ PARA FRONTEND ACESSAR O BACKEND
      app.UseCors(option => option.AllowAnyHeader()
                                         .AllowAnyMethod()
                                         .AllowAnyOrigin());
+
+
+*****CAMADAS*****
+FAZER ISSO DENTRO DA PASTA SRC DO BACKEND
+
+Criando uma soluçãor
+    dotnet new sln -n ProAtividade
+
+    dotnet new classlib -n ProAtividade.Domain
+    dotnet new classlib -n ProAtividade.Data
+
+Adicinando projeto na solução
+    dotnet sln ProAtividade.sln add ProAtividade.API
+    dotnet sln ProAtividade.sln add ProAtividade.Data
+    dotnet sln ProAtividade.sln add ProAtividade.Domain
+
+BUILD   
+    dotnet restore
+
+Adicionando referencia    
+    dotnet add ProAtividade.API reference ProAtividade.Data
+    dotnet add ProAtividade.API reference ProAtividade.Domain
+
+    dotnet add ProAtividade.Data reference ProAtividade.Domain
+    ** Domain não recebe referencia de outro lugar.
+
+Oraganizando o projeto
+    Apagar class1 do Domain e Data.
+    Criar um diretorio chamado Entities, Interfaces e Services no Domain
+    Criar um diretorio chamado Context, Mappings e Repositories no Data
+
+    Mover o arquivo Data/DataContext.cs para ProAtividade/Context
+        alterar o name space 
+            namespace ProAtividade.API.Data
+                        PARA
+            namespace ProAtividade.Data.Context
+        Apagar a pasta Data do API junto com a pasta migrations
+
+    Mover os arquivos da Model para Domain/Entities 
+        alterar o name space 
+            PARA    
+                namespace ProAtividade.Domain.Entities
+            
+        incluir DataCriacao DataConclusao na Model Atividade
+

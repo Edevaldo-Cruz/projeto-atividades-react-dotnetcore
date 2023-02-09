@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using ProAtividade.API.Data;
-using ProAtividade.API.Models;
 using System.Collections.Generic;
+using ProAtividade.Data.Context;
+using ProAtividade.Domain.Entities;
 
 namespace ProAtividade.API.Controllers
 {

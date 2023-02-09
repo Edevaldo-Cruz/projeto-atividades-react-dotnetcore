@@ -98,3 +98,40 @@ Oraganizando o projeto
             
         incluir DataCriacao DataConclusao na Model Atividade
 
+    Copiar PackageRefence do ItemGroup do Projeto API e colar no data.
+        ex:
+         <ItemGroup>
+            <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.10" />
+            <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.10">
+                <PrivateAssets>all</PrivateAssets>
+                <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            </PackageReference>
+            <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.10" />
+            <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.10">
+                <PrivateAssets>all</PrivateAssets>
+                <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            </PackageReference>
+            <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+        </ItemGroup>
+
+    Usar arquivo DataContext como exemplo
+    Usar arquivo AtividadeMap como exemplo
+    Corrigir o arquivo Startup corrigindo a importação
+
+    Fazer o build   
+        dotnet restore
+
+Executando a migrations
+    dotnet ef migrations add initial -p ProAtividade.Data -s ProAtividade.API
+    dotnet ef database update -s ProAtividade.API
+
+
+Adicionar uma pasta chamada Repositories na pasta Interfaces e incluir duas interfaces IAtividadeRepo e IGeralReporder
+    Usar arquivos como exemplo
+
+Adicionar uma pasta chamada Service na pasta Interfaces e incluir uma interfaces IAtividadeService
+     Usar arquivos como exemplo
+
+Criar uma class dentro  do service chamada AtividadeService
+    Usar arquivos como exemplo
+        ctrl . para implementar 

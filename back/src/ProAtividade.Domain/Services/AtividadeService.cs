@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using ProAtividade.Domain.Entities;
 using ProAtividade.Domain.Interfaces.Repositories;
@@ -9,30 +10,57 @@ namespace ProAtividade.Domain.Services
     {
         private readonly IAtividadeRepo _atividadeRepo;
         private readonly IGeralRepo _geralRepo;
-        public AtividadeService(IAtividadeRepo atividadeRepo, IGeralRepo geralRepo)
+        public AtividadeService(IAtividadeRepo atividadeRepo)
         {
-            _geralRepo = geralRepo;
             _atividadeRepo = atividadeRepo;
-
         }
-        public Task<Atividade> AdicionarAtividae(Atividade Model)
+        public async Task<Atividade> AdicionarAtividae(Atividade model)
         {
-            throw new System.NotImplementedException();
-        }
+            if (await _atividadeRepo.PegaPorTituloAsync(model.Titulo) != null)
+                throw new System.Exception("Já exite uma atividade com esse título");
 
-        public Task<Atividade> AtualizarAtividae(Atividade Model)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Task<bool> ConcluirAtividade(Atividade model)
-        {
-            throw new System.NotImplementedException();
+            if (await _atividadeRepo.PegaPorIdAsync(model.Id) == null)
+            {
+                _atividadeRepo.Adicionar(model);
+                if (await _atividadeRepo.SalvarMudancasAsync())
+                    return model;
+            }
+            return null;
         }
 
-        public Task<bool> DeletarAtividade(int atividade)
+        public async Task<Atividade> AtualizarAtividade(Atividade model)
         {
-            throw new System.NotImplementedException();
+            if (model.DataConclusao != null)
+                throw new System.Exception("Não se pode alterar atividade já concluida.");
+            if (await _atividadeRepo.PegaPorIdAsync(model.Id) == null)
+            {
+                _atividadeRepo.Atualizar(model);
+                if (await _atividadeRepo.SalvarMudancasAsync())
+                    return model;
+            }
+
+            return null;
+        }
+
+        public async Task<bool> ConcluirAtividade(Atividade model)
+        {
+            if (model != null)
+            {
+                model.Concluir();
+                _atividadeRepo.Atualizar<Atividade>(model);
+                return await _atividadeRepo.SalvarMudancasAsync();
+            }
+
+            return false;
+        }
+
+        public async Task<bool> DeletarAtividade(int atividadeId)
+        {
+            var atividade = await _atividadeRepo.PegaPorIdAsync(atividadeId);
+            if (atividade == null) throw new Exception("Atividade que tentou deletar não existe");
+
+            _atividadeRepo.Deletar(atividade);
+            return await _atividadeRepo.SalvarMudancasAsync();
         }
 
         public Task<Atividade> PegarAtividadePorIdAsync(int atividadeId)

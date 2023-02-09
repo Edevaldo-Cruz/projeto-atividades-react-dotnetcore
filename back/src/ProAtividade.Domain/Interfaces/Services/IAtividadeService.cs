@@ -5,8 +5,8 @@ namespace ProAtividade.Domain.Interfaces.Services
 {
     public interface IAtividadeService
     {
-        Task<Atividade> AdicionarAtividae(Atividade Model);
-        Task<Atividade> AtualizarAtividae(Atividade Model);
+        Task<Atividade> AdicionarAtividade(Atividade Model);
+        Task<Atividade> AtualizarAtividade(Atividade Model);
         Task<bool> DeletarAtividade(int atividade);
         Task<bool> ConcluirAtividade(Atividade model);
         Task<Atividade[]> PegarTodasAtividadeAsync();
